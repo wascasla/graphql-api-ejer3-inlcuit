@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Alberto",
+        "lastname": "Yapura",
+        "courseId": 1
+    },
+    {
+        "id": 2,
+        "name": "Pablo",
+        "lastname": "Pedemonte",
+        "courseId": 2
+    }
+]
