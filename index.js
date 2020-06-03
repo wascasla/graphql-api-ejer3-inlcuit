@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const expressGraphQL = require('express-graphql')
+const _ = require('lodash');
 const {
     GraphQLSchema,
     GraphQLObjectType,
@@ -75,6 +76,88 @@ const RootMutationType = new GraphQLObjectType({
                 return course
             }
         },
+        addStudent: {
+            type: StudentType,
+            description: 'Add a student',
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString)},
+                lastname: { type: GraphQLNonNull(GraphQLString)},
+                courseId: { type: GraphQLNonNull(GraphQLInt)},
+            },
+            resolve: (parent, args) => {
+                const student = {
+                    id: students.length + 1,
+                    name: args.name,
+                    lastname: args.lastname,
+                    courseId: args.courseId
+                }
+                students.push(student)
+                return student
+            }
+        },
+        addGrade: {
+            type: GradeType,
+            description: 'Add a grade',
+            args: {
+                courseId: { type: GraphQLNonNull(GraphQLInt)},
+                studentId: { type: GraphQLNonNull(GraphQLInt)},
+                grade: { type: GraphQLNonNull(GraphQLInt)},
+            },
+            resolve: (parent, args) => {
+                const grade = {
+                    id: grades.length + 1,
+                    courseId: args.courseId,
+                    studentId: args.studentId,
+                    grade: args.grade
+                }
+                grades.push(grade)
+                return grade
+            }
+        },
+        deleteStudent: {
+            type: StudentType,
+            description: 'delete a grade',
+            args: {
+                id: { type: GraphQLNonNull(GraphQLInt)},                
+            },
+            resolve: (parent, args) => {
+                _.remove(students, (student) => {
+                    // el remove permite iterar un array
+                    return student.id == args.id;
+                  });
+                  return students
+            }
+        },
+        deleteCourse: {
+            type: CourseType,
+            description: 'delete a course',
+            args: {
+                id: { type: GraphQLNonNull(GraphQLInt)},                
+            },
+            resolve: (parent, args) => {
+                _.remove(courses, (course) => {
+                    // el remove permite iterar un array
+                    return course.id == args.id;
+                  });
+                  return courses
+            }
+        },
+        deleteGrade: {
+            type: GradeType,
+            description: 'delete a grade',
+            args: {
+                id: { type: GraphQLNonNull(GraphQLInt)},                
+            },
+            resolve: (parent, args) => {
+                _.remove(grades, (grade) => {
+                    // el remove permite iterar un array
+                    return grade.id == args.id;
+                  });
+                  return grades
+            }
+        }
+
+
     })
 })
 
